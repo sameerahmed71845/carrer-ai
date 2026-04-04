@@ -1,0 +1,368 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>career.ai — Your Career Guidance System</title>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet" />
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    :root {
+      --bg: #080810; --surface: #0f0f1a; --surface2: #16162a;
+      --border: #ffffff12; --purple: #7c6af7; --purple2: #9d8fff;
+      --text: #e8e8f0; --muted: #6b6b8a; --success: #4ade80;
+      --gold: #fbbf24; --silver: #94a3b8; --bronze: #cd7c54;
+    }
+    #bgCanvas { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: 0; pointer-events: none; }
+    .bg-name {
+      position: fixed; top: 50%; left: 50%;
+      transform: translate(-50%, -50%);
+      font-family: 'Space Mono', monospace;
+      font-size: clamp(50px, 11vw, 120px); font-weight: 700;
+      color: rgba(124,106,247,0.045); letter-spacing: 14px;
+      text-transform: uppercase; white-space: nowrap;
+      z-index: 1; pointer-events: none; user-select: none;
+      animation: breathe 6s ease-in-out infinite;
+    }
+    @keyframes breathe {
+      0%, 100% { opacity: 0.7; transform: translate(-50%,-50%) scale(1); }
+      50%       { opacity: 1;   transform: translate(-50%,-50%) scale(1.04); }
+    }
+    .watermark {
+      position: fixed; bottom: 18px; right: 22px; z-index: 999;
+      display: flex; align-items: center; gap: 6px;
+      font-family: 'Space Mono', monospace; font-size: 11px;
+      color: rgba(124,106,247,0.45); letter-spacing: 1px;
+      pointer-events: none; user-select: none;
+    }
+    .watermark-dot { width: 5px; height: 5px; border-radius: 50%; background: var(--purple); opacity: 0.5; animation: pulse 2s infinite; }
+    body {
+      background: var(--bg); color: var(--text);
+      font-family: 'Inter', sans-serif; height: 100vh;
+      display: flex; flex-direction: column; align-items: center;
+      overflow: hidden; position: relative; z-index: 1;
+    }
+    .header, .main-container, .results-screen { position: relative; z-index: 2; }
+    .header {
+      width: 100%; padding: 16px 24px;
+      display: flex; align-items: center; justify-content: space-between;
+      border-bottom: 1px solid var(--border);
+      background: rgba(15,15,26,0.85);
+      backdrop-filter: blur(12px); flex-shrink: 0;
+    }
+    .logo-area { display: flex; align-items: center; gap: 10px; }
+    .logo-icon { width: 36px; height: 36px; background: var(--purple); border-radius: 10px; display: flex; align-items: center; justify-content: center; font-family: 'Space Mono', monospace; font-size: 13px; font-weight: 700; color: white; }
+    .logo-text { font-family: 'Space Mono', monospace; font-size: 18px; font-weight: 700; color: var(--purple2); letter-spacing: 1px; }
+    .status-badge { display: flex; align-items: center; gap: 6px; font-size: 12px; color: var(--muted); }
+    .status-dot { width: 7px; height: 7px; border-radius: 50%; background: var(--success); animation: pulse 2s infinite; }
+    @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.4; } }
+    .main-container { width: 100%; max-width: 760px; flex: 1; display: flex; flex-direction: column; padding: 0 16px 16px; overflow: hidden; }
+    .chat-container { flex: 1; overflow-y: auto; display: flex; flex-direction: column; gap: 16px; padding: 20px 0 10px; }
+    .chat-container::-webkit-scrollbar { width: 3px; }
+    .chat-container::-webkit-scrollbar-thumb { background: #ffffff18; border-radius: 4px; }
+    .message { display: flex; align-items: flex-end; gap: 10px; animation: fadeUp 0.3s ease; }
+    @keyframes fadeUp { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+    .avatar { width: 32px; height: 32px; border-radius: 50%; background: linear-gradient(135deg, var(--purple), #a78bfa); display: flex; align-items: center; justify-content: center; font-size: 11px; font-weight: 700; color: white; flex-shrink: 0; font-family: 'Space Mono', monospace; }
+    .bubble { padding: 12px 16px; border-radius: 18px; font-size: 14px; line-height: 1.65; max-width: 78%; }
+    .bot-message .bubble { background: var(--surface2); color: var(--text); border: 1px solid var(--border); border-bottom-left-radius: 4px; }
+    .user-message { flex-direction: row-reverse; }
+    .user-message .bubble { background: var(--purple); color: white; border-bottom-right-radius: 4px; }
+    .quick-replies { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 8px; margin-left: 42px; }
+    .quick-btn { padding: 8px 16px; border-radius: 20px; border: 1px solid var(--purple); background: transparent; color: var(--purple2); font-size: 13px; cursor: pointer; font-family: 'Inter', sans-serif; transition: all 0.2s; }
+    .quick-btn:hover { background: var(--purple); color: white; }
+    .typing-bubble { display: flex; gap: 5px; align-items: center; padding: 14px 18px !important; }
+    .dot { width: 7px; height: 7px; border-radius: 50%; background: var(--purple); animation: bounce 1s infinite; }
+    .dot:nth-child(2) { animation-delay: 0.18s; }
+    .dot:nth-child(3) { animation-delay: 0.36s; }
+    @keyframes bounce { 0%, 100% { transform: translateY(0); opacity: 0.5; } 50% { transform: translateY(-7px); opacity: 1; } }
+    .input-area { display: flex; gap: 10px; padding: 12px 0 0; border-top: 1px solid var(--border); flex-shrink: 0; }
+    .input-area input { flex: 1; padding: 13px 18px; border-radius: 26px; border: 1px solid var(--border); background: var(--surface2); color: var(--text); font-size: 14px; outline: none; font-family: 'Inter', sans-serif; transition: border-color 0.2s; }
+    .input-area input::placeholder { color: var(--muted); }
+    .input-area input:focus { border-color: var(--purple); box-shadow: 0 0 0 3px rgba(124,106,247,0.15); }
+    .input-area button { padding: 13px 22px; border-radius: 26px; border: none; background: var(--purple); color: white; font-size: 14px; font-weight: 600; cursor: pointer; font-family: 'Inter', sans-serif; transition: background 0.2s, transform 0.1s; }
+    .input-area button:hover { background: #6254d4; }
+    .input-area button:active { transform: scale(0.97); }
+    .results-screen { width: 100%; max-width: 760px; padding: 20px 16px; display: none; flex-direction: column; gap: 14px; overflow-y: auto; flex: 1; }
+    .results-screen::-webkit-scrollbar { width: 3px; }
+    .results-screen::-webkit-scrollbar-thumb { background: #ffffff18; border-radius: 4px; }
+    .results-title { text-align: center; font-family: 'Space Mono', monospace; font-size: 16px; color: var(--purple2); letter-spacing: 1px; margin-bottom: 4px; }
+    .results-subtitle { text-align: center; font-size: 13px; color: var(--muted); margin-bottom: 8px; }
+    .thankyou-banner { background: linear-gradient(135deg, rgba(124,106,247,0.12), rgba(99,60,180,0.08)); border: 1px solid rgba(124,106,247,0.25); border-radius: 16px; padding: 22px 24px; text-align: center; animation: fadeUp 0.6s ease; }
+    .ty-emoji { font-size: 30px; margin-bottom: 10px; }
+    .ty-title { font-family: 'Space Mono', monospace; font-size: 13px; color: var(--purple2); letter-spacing: 1px; margin-bottom: 10px; }
+    .ty-text { font-size: 13px; color: #a0a0c0; line-height: 1.7; }
+    .ty-brand { font-family: 'Space Mono', monospace; font-size: 11px; color: rgba(124,106,247,0.5); margin-top: 14px; letter-spacing: 1px; }
+    .result-card { background: var(--surface); border: 1px solid var(--border); border-radius: 16px; padding: 18px 20px; animation: fadeUp 0.4s ease; }
+    .result-card.rank-1 { border-color: var(--gold); }
+    .result-card.rank-2 { border-color: var(--silver); }
+    .result-card.rank-3 { border-color: var(--bronze); }
+    .rank-label { font-size: 11px; font-weight: 600; letter-spacing: 1px; text-transform: uppercase; margin-bottom: 8px; }
+    .rank-1 .rank-label { color: var(--gold); } .rank-2 .rank-label { color: var(--silver); } .rank-3 .rank-label { color: var(--bronze); }
+    .card-top { display: flex; align-items: center; justify-content: space-between; margin-bottom: 8px; }
+    .career-name { font-size: 20px; font-weight: 600; font-family: 'Space Mono', monospace; }
+    .match-pill { padding: 4px 12px; border-radius: 20px; font-size: 13px; font-weight: 600; background: rgba(124,106,247,0.15); color: var(--purple2); }
+    .card-reason { font-size: 13px; color: #a0a0c0; line-height: 1.6; margin-bottom: 10px; }
+    .progress-bar-bg { width: 100%; height: 5px; background: var(--border); border-radius: 4px; overflow: hidden; }
+    .progress-bar-fill { height: 100%; border-radius: 4px; background: var(--purple); transition: width 1s ease; }
+    .rank-1 .progress-bar-fill { background: var(--gold); } .rank-2 .progress-bar-fill { background: var(--silver); } .rank-3 .progress-bar-fill { background: var(--bronze); }
+    .reality-card { background: var(--surface); border: 1px solid var(--border); border-radius: 16px; padding: 18px 20px; }
+    .reality-title { font-size: 12px; font-weight: 600; color: var(--muted); letter-spacing: 1px; text-transform: uppercase; margin-bottom: 14px; }
+    .reality-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; }
+    .reality-item { background: var(--surface2); border-radius: 12px; padding: 12px; text-align: center; }
+    .reality-icon { font-size: 20px; margin-bottom: 6px; }
+    .reality-label { font-size: 11px; color: var(--muted); margin-bottom: 4px; }
+    .reality-value { font-size: 14px; font-weight: 600; color: var(--text); }
+    .restart-btn { margin: 8px auto 0; padding: 12px 28px; border-radius: 26px; border: 1px solid var(--purple); background: transparent; color: var(--purple2); font-size: 14px; font-weight: 500; cursor: pointer; font-family: 'Inter', sans-serif; transition: all 0.2s; display: block; }
+    .restart-btn:hover { background: var(--purple); color: white; }
+  </style>
+</head>
+<body>
+  <canvas id="bgCanvas"></canvas>
+  <div class="bg-name">SAMEER</div>
+  <div class="watermark"><div class="watermark-dot"></div>Built by Sameer</div>
+
+  <div class="header">
+    <div class="logo-area">
+      <div class="logo-icon">AI</div>
+      <span class="logo-text">career.ai</span>
+    </div>
+    <div class="status-badge"><div class="status-dot"></div>Online</div>
+  </div>
+
+  <div class="main-container" id="chatView">
+    <div class="chat-container" id="chatContainer"></div>
+    <div class="input-area">
+      <input type="text" id="userInput" placeholder="Type your answer here..." />
+      <button id="sendBtn">Send ➤</button>
+    </div>
+  </div>
+
+  <div class="results-screen" id="resultsScreen">
+    <p class="results-title">// CAREER ANALYSIS COMPLETE</p>
+    <p class="results-subtitle">Based on your responses, here are your best-fit career paths</p>
+    <div id="resultsContent"></div>
+    <div class="thankyou-banner">
+      <div class="ty-emoji">🌟</div>
+      <div class="ty-title">Thank you for choosing Sameer's career.ai</div>
+      <div class="ty-text">
+        We hope this analysis helps you make a confident decision about your future.<br><br>
+        Remember — the right path aligns with both your passion and your strengths.<br><br>
+        <strong style="color:var(--purple2);">We wish you the very best! 🚀</strong>
+      </div>
+      <div class="ty-brand">— career.ai by Sameer</div>
+    </div>
+    <button class="restart-btn" onclick="restartChat()">↩ Start Over</button>
+  </div>
+
+  <script>
+    // ── PASTE YOUR GEMINI API KEY HERE ──
+    const GEMINI_API_KEY = 'AIzaSyDsG6mBCZu_vyIL1BbhNzr7kKwP_hQtnsk';
+
+    const chatContainer = document.getElementById('chatContainer');
+    const userInput     = document.getElementById('userInput');
+    const sendBtn       = document.getElementById('sendBtn');
+    const chatView      = document.getElementById('chatView');
+    const resultsScreen = document.getElementById('resultsScreen');
+    const conversationHistory = [];
+
+    const systemPrompt = `You are career.ai — a friendly, intelligent career guidance system for Indian students in 10th or 12th standard.
+FLOW:
+STEP 1 — Greet and ask if student is in 10th or 12th standard.
+STEP 2 — Ask these ONE AT A TIME. Never ask two together:
+  1. Favourite subject?
+  2. Difficult subjects?
+  3. Prefer solving problems or helping people?
+  4. Can you study 8-10 years continuously?
+  5. Introvert or extrovert?
+  6. Family financial situation? (low/medium/high)
+  7. Safe job or high-risk high-reward career?
+  8. Imagine yourself at age 30 — what are you doing?
+STEP 3 — After ALL 8 answers output EXACTLY:
+---RESULTS---
+TOP:[name]|[number]|[2 sentence reason]
+SECOND:[name]|[number]|[2 sentence reason]
+THIRD:[name]|[number]|[2 sentence reason]
+REALITY:[X-Y years]|[Easy/Medium/Hard]|[Low/Medium/High]
+---END---
+Options: MPC (Engineering/JEE), BiPC (Medical/NEET), Commerce (CA/MBA), Arts/Humanities, Diploma/Polytechnic, Computer Science (BCA/BSc CS)
+RULES: Warm and simple. One question at a time. Short replies. Indian context. Do NOT output ---RESULTS--- until all 8 answered.`;
+
+    function addMessage(text, sender) {
+      const div = document.createElement('div');
+      div.classList.add('message', sender + '-message');
+      div.innerHTML = sender === 'bot'
+        ? `<div class="avatar">AI</div><div class="bubble">${text}</div>`
+        : `<div class="bubble">${text}</div>`;
+      chatContainer.appendChild(div);
+      chatContainer.scrollTop = chatContainer.scrollHeight;
+    }
+
+    function addQuickReplies(options) {
+      const div = document.createElement('div');
+      div.classList.add('quick-replies'); div.id = 'quickReplies';
+      options.forEach(opt => {
+        const btn = document.createElement('button');
+        btn.className = 'quick-btn'; btn.textContent = opt;
+        btn.onclick = () => { document.getElementById('quickReplies')?.remove(); userInput.value = opt; handleUserMessage(); };
+        div.appendChild(btn);
+      });
+      chatContainer.appendChild(div);
+      chatContainer.scrollTop = chatContainer.scrollHeight;
+    }
+
+    function showTyping() {
+      const div = document.createElement('div');
+      div.classList.add('message', 'bot-message'); div.id = 'typingIndicator';
+      div.innerHTML = `<div class="avatar">AI</div><div class="bubble typing-bubble"><span class="dot"></span><span class="dot"></span><span class="dot"></span></div>`;
+      chatContainer.appendChild(div);
+      chatContainer.scrollTop = chatContainer.scrollHeight;
+    }
+
+    function removeTyping() { document.getElementById('typingIndicator')?.remove(); }
+
+    function parseAndShowResults(text) {
+      const block = text.split('---RESULTS---')[1].split('---END---')[0].trim();
+      const lines = block.split('\n').map(l => l.trim()).filter(Boolean);
+      const results = []; let reality = null;
+      lines.forEach(line => {
+        if (line.startsWith('TOP:'))         { const p=line.replace('TOP:','').split('|');      results.push({rank:1,label:'🥇 Top Pick',name:p[0].trim(),score:parseInt(p[1]),reason:p[2].trim()}); }
+        else if (line.startsWith('SECOND:')) { const p=line.replace('SECOND:','').split('|'); results.push({rank:2,label:'🥈 Second Option',name:p[0].trim(),score:parseInt(p[1]),reason:p[2].trim()}); }
+        else if (line.startsWith('THIRD:'))  { const p=line.replace('THIRD:','').split('|');  results.push({rank:3,label:'🥉 Third Option',name:p[0].trim(),score:parseInt(p[1]),reason:p[2].trim()}); }
+        else if (line.startsWith('REALITY:')){ const p=line.replace('REALITY:','').split('|'); reality={years:p[0].trim(),difficulty:p[1].trim(),competition:p[2].trim()}; }
+      });
+      let html = '';
+      results.forEach(r => {
+        html += `<div class="result-card rank-${r.rank}"><div class="rank-label">${r.label}</div><div class="card-top"><div class="career-name">${r.name}</div><div class="match-pill">${r.score}% match</div></div><p class="card-reason">${r.reason}</p><div class="progress-bar-bg"><div class="progress-bar-fill" style="width:${r.score}%"></div></div></div>`;
+      });
+      if (reality) {
+        html += `<div class="reality-card"><div class="reality-title">⚠ Reality Check</div><div class="reality-grid"><div class="reality-item"><div class="reality-icon">📅</div><div class="reality-label">Study Duration</div><div class="reality-value">${reality.years}</div></div><div class="reality-item"><div class="reality-icon">🎯</div><div class="reality-label">Difficulty</div><div class="reality-value">${reality.difficulty}</div></div><div class="reality-item"><div class="reality-icon">⚡</div><div class="reality-label">Competition</div><div class="reality-value">${reality.competition}</div></div></div></div>`;
+      }
+      document.getElementById('resultsContent').innerHTML = html;
+      chatView.style.display = 'none';
+      resultsScreen.style.display = 'flex';
+    }
+
+    async function getBotReply(userText) {
+      conversationHistory.push({ role: 'user', content: userText });
+      showTyping();
+
+      try {
+        // Build Gemini contents
+        const contents = [];
+
+        // Add system as first exchange
+        contents.push({ role: 'user', parts: [{ text: 'SYSTEM: ' + systemPrompt }] });
+        contents.push({ role: 'model', parts: [{ text: 'Understood. I will follow these instructions.' }] });
+
+        // Add conversation
+        conversationHistory.forEach(msg => {
+          contents.push({
+            role: msg.role === 'assistant' ? 'model' : 'user',
+            parts: [{ text: msg.content }]
+          });
+        });
+
+        const response = await fetch(
+          `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${GEMINI_API_KEY}`,
+          {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              contents,
+              generationConfig: { maxOutputTokens: 1000, temperature: 0.7 }
+            })
+          }
+        );
+
+        const data = await response.json();
+
+        if (data.error) throw new Error(data.error.message);
+
+        const botReply = data.candidates?.[0]?.content?.parts?.[0]?.text;
+        if (!botReply) throw new Error('No response from AI');
+
+        conversationHistory.push({ role: 'assistant', content: botReply });
+        removeTyping();
+
+        if (botReply.includes('---RESULTS---')) {
+          const preText = botReply.split('---RESULTS---')[0].trim();
+          if (preText) addMessage(preText, 'bot');
+          setTimeout(() => parseAndShowResults(botReply), 1200);
+        } else {
+          addMessage(botReply, 'bot');
+          if (conversationHistory.length === 2) addQuickReplies(['10th Standard', '12th Standard']);
+        }
+
+      } catch (error) {
+        removeTyping();
+        addMessage(`Error: ${error.message}`, 'bot');
+        console.error('Error:', error);
+      }
+    }
+
+    function handleUserMessage() {
+      document.getElementById('quickReplies')?.remove();
+      const text = userInput.value.trim();
+      if (!text) return;
+      addMessage(text, 'user');
+      userInput.value = '';
+      getBotReply(text);
+    }
+
+    sendBtn.addEventListener('click', handleUserMessage);
+    userInput.addEventListener('keydown', e => { if (e.key === 'Enter') handleUserMessage(); });
+
+    function restartChat() {
+      conversationHistory.length = 0;
+      chatContainer.innerHTML = '';
+      resultsScreen.style.display = 'none';
+      chatView.style.display = 'flex';
+      startChat();
+    }
+
+    function startChat() { getBotReply('Hello, I want career guidance.'); }
+    startChat();
+
+    // BACKGROUND
+    const canvas = document.getElementById('bgCanvas');
+    const ctx = canvas.getContext('2d');
+    let W, H, particles;
+    function resize() { W = canvas.width = window.innerWidth; H = canvas.height = window.innerHeight; }
+    function createParticles() {
+      particles = [];
+      const count = Math.floor((W * H) / 12000);
+      for (let i = 0; i < count; i++) {
+        particles.push({ x: Math.random()*W, y: Math.random()*H, vx: (Math.random()-0.5)*0.4, vy: (Math.random()-0.5)*0.4, r: Math.random()*1.8+0.5 });
+      }
+    }
+    function animate() {
+      ctx.fillStyle = '#080810'; ctx.fillRect(0,0,W,H);
+      const g1 = ctx.createRadialGradient(W*.2,H*.3,0,W*.2,H*.3,W*.35);
+      g1.addColorStop(0,'rgba(124,106,247,0.07)'); g1.addColorStop(1,'transparent');
+      ctx.fillStyle=g1; ctx.fillRect(0,0,W,H);
+      const g2 = ctx.createRadialGradient(W*.8,H*.7,0,W*.8,H*.7,W*.3);
+      g2.addColorStop(0,'rgba(99,60,180,0.06)'); g2.addColorStop(1,'transparent');
+      ctx.fillStyle=g2; ctx.fillRect(0,0,W,H);
+      particles.forEach(p => {
+        p.x+=p.vx; p.y+=p.vy;
+        if(p.x<0||p.x>W) p.vx*=-1; if(p.y<0||p.y>H) p.vy*=-1;
+        ctx.beginPath(); ctx.arc(p.x,p.y,p.r,0,Math.PI*2);
+        ctx.fillStyle='rgba(124,106,247,0.5)'; ctx.fill();
+      });
+      for(let i=0;i<particles.length;i++) {
+        for(let j=i+1;j<particles.length;j++) {
+          const dx=particles[i].x-particles[j].x, dy=particles[i].y-particles[j].y;
+          const dist=Math.sqrt(dx*dx+dy*dy);
+          if(dist<130) {
+            ctx.beginPath(); ctx.moveTo(particles[i].x,particles[i].y); ctx.lineTo(particles[j].x,particles[j].y);
+            ctx.strokeStyle=`rgba(124,106,247,${(1-dist/130)*0.18})`; ctx.lineWidth=0.6; ctx.stroke();
+          }
+        }
+      }
+      requestAnimationFrame(animate);
+    }
+    resize(); createParticles(); animate();
+    window.addEventListener('resize', () => { resize(); createParticles(); });
+  </script>
+</body>
+</html>
