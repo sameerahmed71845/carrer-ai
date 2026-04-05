@@ -6,7 +6,7 @@
   <title>career.ai — Your Career Guidance System</title>
   <link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet" />
   <style>
-    * { margin: 0; padding: 0; box-sizing: border-box; }  
+    * { margin: 0; padding: 0; box-sizing: border-box; }
     :root {
       --bg: #080810; --surface: #0f0f1a; --surface2: #16162a;
       --border: #ffffff12; --purple: #7c6af7; --purple2: #9d8fff;
@@ -90,13 +90,7 @@
     .input-area button { padding: 13px 22px; border-radius: 26px; border: none; background: var(--purple); color: white; font-size: 14px; font-weight: 600; cursor: pointer; font-family: 'Inter', sans-serif; transition: background 0.2s, transform 0.1s; }
     .input-area button:hover { background: #6254d4; }
     .input-area button:active { transform: scale(0.97); }
-
-    /* ── RESULTS SCREEN ── */
-    .results-screen {
-      width: 100%; max-width: 760px; padding: 20px 16px;
-      display: none; flex-direction: column; gap: 14px;
-      overflow-y: auto; flex: 1;
-    }
+    .results-screen { width: 100%; max-width: 760px; padding: 20px 16px; display: none; flex-direction: column; gap: 14px; overflow-y: auto; flex: 1; }
     .results-screen::-webkit-scrollbar { width: 3px; }
     .results-screen::-webkit-scrollbar-thumb { background: #ffffff18; border-radius: 4px; }
     .results-title { text-align: center; font-family: 'Space Mono', monospace; font-size: 16px; color: var(--purple2); letter-spacing: 1px; margin-bottom: 4px; }
@@ -111,11 +105,18 @@
     .career-name { font-size: 20px; font-weight: 600; font-family: 'Space Mono', monospace; }
     .match-pill { padding: 4px 12px; border-radius: 20px; font-size: 13px; font-weight: 600; background: rgba(124,106,247,0.15); color: var(--purple2); }
     .card-reason { font-size: 13px; color: #a0a0c0; line-height: 1.6; margin-bottom: 10px; }
-    .progress-bar-bg { width: 100%; height: 5px; background: var(--border); border-radius: 4px; overflow: hidden; }
+    .progress-bar-bg { width: 100%; height: 5px; background: var(--border); border-radius: 4px; overflow: hidden; margin-bottom: 14px; }
     .progress-bar-fill { height: 100%; border-radius: 4px; transition: width 1.2s ease; }
     .rank-1 .progress-bar-fill { background: var(--gold); }
     .rank-2 .progress-bar-fill { background: var(--silver); }
     .rank-3 .progress-bar-fill { background: var(--bronze); }
+    .card-section { margin-top: 10px; }
+    .card-section-title { font-size: 11px; color: var(--muted); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 8px; font-weight: 600; }
+    .tags-row { display: flex; flex-wrap: wrap; gap: 6px; }
+    .tag { padding: 4px 10px; border-radius: 20px; font-size: 12px; font-weight: 500; }
+    .tag-job { background: rgba(124,106,247,0.15); color: var(--purple2); }
+    .tag-course { background: rgba(74,222,128,0.1); color: #4ade80; }
+    .tag-risk { background: rgba(251,191,36,0.1); color: var(--gold); }
     .reality-card { background: var(--surface); border: 1px solid var(--border); border-radius: 16px; padding: 18px 20px; animation: fadeUp 0.5s ease; }
     .reality-title { font-size: 12px; font-weight: 600; color: var(--muted); letter-spacing: 1px; text-transform: uppercase; margin-bottom: 14px; }
     .reality-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; }
@@ -123,22 +124,12 @@
     .reality-icon { font-size: 20px; margin-bottom: 6px; }
     .reality-label { font-size: 11px; color: var(--muted); margin-bottom: 4px; }
     .reality-value { font-size: 14px; font-weight: 600; color: var(--text); }
-    .thankyou-banner {
-      background: linear-gradient(135deg, rgba(124,106,247,0.12), rgba(99,60,180,0.08));
-      border: 1px solid rgba(124,106,247,0.25);
-      border-radius: 16px; padding: 24px; text-align: center; animation: fadeUp 0.6s ease;
-    }
+    .thankyou-banner { background: linear-gradient(135deg, rgba(124,106,247,0.12), rgba(99,60,180,0.08)); border: 1px solid rgba(124,106,247,0.25); border-radius: 16px; padding: 24px; text-align: center; animation: fadeUp 0.6s ease; }
     .ty-emoji { font-size: 32px; margin-bottom: 10px; }
     .ty-title { font-family: 'Space Mono', monospace; font-size: 14px; color: var(--purple2); letter-spacing: 1px; margin-bottom: 12px; }
     .ty-text { font-size: 13px; color: #a0a0c0; line-height: 1.8; }
     .ty-brand { font-family: 'Space Mono', monospace; font-size: 11px; color: rgba(124,106,247,0.5); margin-top: 14px; letter-spacing: 1px; }
-    .restart-btn {
-      margin: 4px auto 16px; padding: 14px 36px;
-      border-radius: 26px; border: 1px solid var(--purple);
-      background: transparent; color: var(--purple2);
-      font-size: 14px; font-weight: 500; cursor: pointer;
-      font-family: 'Inter', sans-serif; transition: all 0.2s; display: block;
-    }
+    .restart-btn { margin: 4px auto 16px; padding: 14px 36px; border-radius: 26px; border: 1px solid var(--purple); background: transparent; color: var(--purple2); font-size: 14px; font-weight: 500; cursor: pointer; font-family: 'Inter', sans-serif; transition: all 0.2s; display: block; }
     .restart-btn:hover { background: var(--purple); color: white; transform: scale(1.02); }
   </style>
 </head>
@@ -184,8 +175,9 @@
   </div>
 
   <script>
-    // ── PASTE YOUR GEMINI API KEY HERE ──
-    const GEMINI_API_KEY = 'AIzaSyBnA5IsaBDqTjqtL2u6KYffTIkgR7UPXvU';
+    // ── YOUR GEMINI API KEY ──
+    // REPLACE THE KEY BELOW WITH YOUR OWN KEY
+    const GEMINI_API_KEY = 'AIzaSyDZsActV1cfOtXii3R1g9vEB-am_Lmq7Vw';
 
     const chatContainer = document.getElementById('chatContainer');
     const userInput     = document.getElementById('userInput');
@@ -194,27 +186,100 @@
     const resultsScreen = document.getElementById('resultsScreen');
     const conversationHistory = [];
 
-    const systemPrompt = `You are career.ai — a friendly, intelligent career guidance system for Indian students in 10th or 12th standard.
+    const systemPrompt = `You are career.ai — a friendly, intelligent career guidance system for Indian students after 10th or 12th standard.
+
 FLOW:
-STEP 1 — Greet warmly and ask if student is in 10th or 12th standard.
-STEP 2 — Ask these ONE AT A TIME. Never ask two together:
-  1. Favourite subject?
-  2. Difficult subjects?
-  3. Prefer solving problems or helping people?
-  4. Can you study 8-10 years continuously?
-  5. Introvert or extrovert?
-  6. Family financial situation? (low/medium/high)
-  7. Safe job or high-risk high-reward career?
-  8. Imagine yourself at age 30 — what are you doing?
-STEP 3 — After ALL 8 answers, say "Thank you! Analyzing your profile..." then output EXACTLY this format on new lines:
+
+STEP 1 — Greet warmly. Ask: "Are you currently in 10th or 12th standard?"
+
+STEP 2A — If student says 10TH:
+Ask these ONE AT A TIME:
+  1. What is your favourite subject in school?
+  2. Are you better at Maths or Biology or both or neither?
+  3. Do you enjoy solving logical problems or helping and caring for people?
+  4. Are you more creative or more analytical?
+  5. What is your family financial situation? (low/medium/high)
+  6. What do you imagine doing at age 30?
+
+After all answers, recommend which GROUP to take in 11th and then output EXACTLY:
+
 ---RESULTS---
-TOP:[name]|[number only]|[2 sentence reason]
-SECOND:[name]|[number only]|[2 sentence reason]
-THIRD:[name]|[number only]|[2 sentence reason]
+TOP:[group name like MPC]|[match %]|[2 sentence reason]
+TOP_JOBS:[job1],[job2],[job3],[job4]
+TOP_COURSES:[course1],[course2],[course3]
+TOP_RISKS:[risk1],[risk2]
+
+SECOND:[group name]|[match %]|[2 sentence reason]
+SECOND_JOBS:[job1],[job2],[job3],[job4]
+SECOND_COURSES:[course1],[course2],[course3]
+SECOND_RISKS:[risk1],[risk2]
+
+THIRD:[group name]|[match %]|[2 sentence reason]
+THIRD_JOBS:[job1],[job2],[job3],[job4]
+THIRD_COURSES:[course1],[course2],[course3]
+THIRD_RISKS:[risk1],[risk2]
+
+REALITY:[X-Y years total study]|[Easy/Medium/Hard]|[Low/Medium/High competition]
+---END---
+
+STEP 2B — If student says 12TH:
+First ask: "Which group are you currently studying? (MPC / BiPC / CEC / MEC / HEC / Other)"
+
+Then ask ONE AT A TIME:
+  1. What is your favourite subject?
+  2. Which subjects do you find difficult?
+  3. Do you prefer solving problems (logic) or helping people (empathy)?
+  4. Can you study continuously for 8-10 years like for MBBS?
+  5. Are you more introverted or extroverted?
+  6. What is your family financial situation? (low/medium/high)
+  7. Do you prefer a safe stable job or high-risk high-reward career?
+  8. Imagine yourself at age 30 — what are you doing?
+
+After all answers output EXACTLY:
+
+---RESULTS---
+TOP:[career name]|[match %]|[2 sentence reason]
+TOP_JOBS:[job1],[job2],[job3],[job4]
+TOP_COURSES:[course1],[course2],[course3]
+TOP_RISKS:[risk1],[risk2]
+
+SECOND:[career name]|[match %]|[2 sentence reason]
+SECOND_JOBS:[job1],[job2],[job3],[job4]
+SECOND_COURSES:[course1],[course2],[course3]
+SECOND_RISKS:[risk1],[risk2]
+
+THIRD:[career name]|[match %]|[2 sentence reason]
+THIRD_JOBS:[job1],[job2],[job3],[job4]
+THIRD_COURSES:[course1],[course2],[course3]
+THIRD_RISKS:[risk1],[risk2]
+
 REALITY:[X-Y years]|[Easy/Medium/Hard]|[Low/Medium/High]
 ---END---
-Options: MPC (Engineering/JEE), BiPC (Medical/NEET), Commerce (CA/MBA), Arts/Humanities, Diploma/Polytechnic, Computer Science (BCA/BSc CS)
-RULES: Warm and simple. One question at a time. Short replies. Indian context. Do NOT output ---RESULTS--- until all 8 answered. The ---RESULTS--- block must always end with ---END---.`;
+
+Groups to recommend for 10th students:
+- MPC (Maths Physics Chemistry) for Engineering Technology Architecture JEE
+- BiPC (Biology Physics Chemistry) for Medical Pharmacy Nursing NEET
+- CEC (Commerce Economics Civics) for CA Business Banking Law
+- MEC (Maths Economics Commerce) for Economics Finance Data Science
+- HEC (History Economics Civics) for Civil Services Law Journalism UPSC
+- MBI (Maths Biology) for Biotechnology Bioinformatics
+
+Career paths for 12th students:
+ENGINEERING: BTech CSE, BTech AI/ML, BTech ECE, BTech Mechanical, BTech Civil, BArch
+MEDICAL: MBBS, BDS, BAMS, BHMS, BPharm, BSc Nursing, BSc MLT, Physiotherapy, BSc Optometry
+COMMERCE: CA, CMA, CS, BCom, BBA, MBA, Banking, Stock Market Analyst
+SCIENCE: BSc Physics, BSc Chemistry, BSc Maths, BSc Biotechnology, BSc Data Science
+HUMANITIES: BA Political Science, BA Psychology, BA Journalism, LLB, UPSC IAS preparation
+TECHNOLOGY: BCA, BSc CS, BSc IT, Diploma CS, Animation and Design
+
+RULES:
+- Be warm encouraging and simple
+- One question at a time always
+- Short replies 3-4 lines max
+- Indian context JEE NEET CA IIT EAMCET KCET etc
+- Never force a decision explain the why
+- Do NOT output RESULTS until all questions answered
+- Always end results block with ---END---`;
 
     function addMessage(text, sender) {
       const div = document.createElement('div');
@@ -257,21 +322,32 @@ RULES: Warm and simple. One question at a time. Short replies. Indian context. D
       try {
         const block = text.split('---RESULTS---')[1].split('---END---')[0].trim();
         const lines = block.split('\n').map(l => l.trim()).filter(Boolean);
-        const results = []; let reality = null;
+        const results = [];
+        let reality = null;
+        let current = null;
 
         lines.forEach(line => {
           if (line.startsWith('TOP:')) {
             const p = line.replace('TOP:', '').split('|');
-            results.push({ rank: 1, label: '🥇 Top Pick', name: p[0].trim(), score: parseInt(p[1]), reason: p[2].trim() });
+            current = { rank:1, label:'🥇 Top Pick', name:p[0].trim(), score:parseInt(p[1]), reason:p[2].trim(), jobs:[], courses:[], risks:[] };
+            results.push(current);
           } else if (line.startsWith('SECOND:')) {
             const p = line.replace('SECOND:', '').split('|');
-            results.push({ rank: 2, label: '🥈 Second Option', name: p[0].trim(), score: parseInt(p[1]), reason: p[2].trim() });
+            current = { rank:2, label:'🥈 Second Option', name:p[0].trim(), score:parseInt(p[1]), reason:p[2].trim(), jobs:[], courses:[], risks:[] };
+            results.push(current);
           } else if (line.startsWith('THIRD:')) {
             const p = line.replace('THIRD:', '').split('|');
-            results.push({ rank: 3, label: '🥉 Third Option', name: p[0].trim(), score: parseInt(p[1]), reason: p[2].trim() });
+            current = { rank:3, label:'🥉 Third Option', name:p[0].trim(), score:parseInt(p[1]), reason:p[2].trim(), jobs:[], courses:[], risks:[] };
+            results.push(current);
+          } else if (line.includes('_JOBS:') && current) {
+            current.jobs = line.split(':')[1].split(',').map(j => j.trim()).filter(Boolean);
+          } else if (line.includes('_COURSES:') && current) {
+            current.courses = line.split(':')[1].split(',').map(c => c.trim()).filter(Boolean);
+          } else if (line.includes('_RISKS:') && current) {
+            current.risks = line.split(':')[1].split(',').map(r => r.trim()).filter(Boolean);
           } else if (line.startsWith('REALITY:')) {
             const p = line.replace('REALITY:', '').split('|');
-            reality = { years: p[0].trim(), difficulty: p[1].trim(), competition: p[2].trim() };
+            reality = { years:p[0].trim(), difficulty:p[1].trim(), competition:p[2].trim() };
           }
         });
 
@@ -288,6 +364,21 @@ RULES: Warm and simple. One question at a time. Short replies. Indian context. D
               <div class="progress-bar-bg">
                 <div class="progress-bar-fill" style="width:0%" data-width="${r.score}%"></div>
               </div>
+              ${r.jobs.length ? `
+              <div class="card-section">
+                <div class="card-section-title">💼 Career Roles</div>
+                <div class="tags-row">${r.jobs.map(j => `<span class="tag tag-job">${j}</span>`).join('')}</div>
+              </div>` : ''}
+              ${r.courses.length ? `
+              <div class="card-section">
+                <div class="card-section-title">🎓 Courses to Pursue</div>
+                <div class="tags-row">${r.courses.map(c => `<span class="tag tag-course">${c}</span>`).join('')}</div>
+              </div>` : ''}
+              ${r.risks.length ? `
+              <div class="card-section">
+                <div class="card-section-title">⚠️ Risks to Consider</div>
+                <div class="tags-row">${r.risks.map(rk => `<span class="tag tag-risk">${rk}</span>`).join('')}</div>
+              </div>` : ''}
             </div>`;
         });
 
@@ -307,7 +398,6 @@ RULES: Warm and simple. One question at a time. Short replies. Indian context. D
         chatView.style.display = 'none';
         resultsScreen.style.display = 'flex';
 
-        // Animate progress bars after render
         setTimeout(() => {
           document.querySelectorAll('.progress-bar-fill').forEach(bar => {
             bar.style.width = bar.dataset.width;
@@ -343,18 +433,17 @@ RULES: Warm and simple. One question at a time. Short replies. Indian context. D
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
               contents,
-              generationConfig: { maxOutputTokens: 1000, temperature: 0.7 }
+              generationConfig: { maxOutputTokens: 1500, temperature: 0.7 }
             })
           }
         );
 
         const data = await response.json();
 
-        // Handle rate limit error gracefully
         if (data.error) {
           removeTyping();
           if (data.error.code === 429) {
-            addMessage('⏳ Too many requests! Please wait 30 seconds and try again. The free API has a limit of 15 requests per minute.', 'bot');
+            addMessage('⏳ Too many requests! Please wait 30 seconds and try again. The free API has a limit of 10 requests per minute.', 'bot');
           } else {
             addMessage(`API Error: ${data.error.message}`, 'bot');
           }
