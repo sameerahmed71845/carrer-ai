@@ -53,9 +53,17 @@
     .logo-area { display: flex; align-items: center; gap: 10px; }
     .logo-icon { width: 36px; height: 36px; background: var(--purple); border-radius: 10px; display: flex; align-items: center; justify-content: center; font-family: 'Space Mono', monospace; font-size: 13px; font-weight: 700; color: white; }
     .logo-text { font-family: 'Space Mono', monospace; font-size: 18px; font-weight: 700; color: var(--purple2); letter-spacing: 1px; }
+    .header-right { display: flex; align-items: center; gap: 14px; }
     .status-badge { display: flex; align-items: center; gap: 6px; font-size: 12px; color: var(--muted); }
     .status-dot { width: 7px; height: 7px; border-radius: 50%; background: var(--success); animation: pulse 2s infinite; }
     @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.4; } }
+    .header-restart {
+      padding: 6px 14px; border-radius: 20px;
+      border: 1px solid var(--border); background: transparent;
+      color: var(--muted); font-size: 12px; cursor: pointer;
+      font-family: 'Inter', sans-serif; transition: all 0.2s;
+    }
+    .header-restart:hover { border-color: var(--purple); color: var(--purple2); }
     .main-container { width: 100%; max-width: 760px; flex: 1; display: flex; flex-direction: column; padding: 0 16px 16px; overflow: hidden; }
     .chat-container { flex: 1; overflow-y: auto; display: flex; flex-direction: column; gap: 16px; padding: 20px 0 10px; }
     .chat-container::-webkit-scrollbar { width: 3px; }
@@ -82,16 +90,17 @@
     .input-area button { padding: 13px 22px; border-radius: 26px; border: none; background: var(--purple); color: white; font-size: 14px; font-weight: 600; cursor: pointer; font-family: 'Inter', sans-serif; transition: background 0.2s, transform 0.1s; }
     .input-area button:hover { background: #6254d4; }
     .input-area button:active { transform: scale(0.97); }
-    .results-screen { width: 100%; max-width: 760px; padding: 20px 16px; display: none; flex-direction: column; gap: 14px; overflow-y: auto; flex: 1; }
+
+    /* ── RESULTS SCREEN ── */
+    .results-screen {
+      width: 100%; max-width: 760px; padding: 20px 16px;
+      display: none; flex-direction: column; gap: 14px;
+      overflow-y: auto; flex: 1;
+    }
     .results-screen::-webkit-scrollbar { width: 3px; }
     .results-screen::-webkit-scrollbar-thumb { background: #ffffff18; border-radius: 4px; }
     .results-title { text-align: center; font-family: 'Space Mono', monospace; font-size: 16px; color: var(--purple2); letter-spacing: 1px; margin-bottom: 4px; }
     .results-subtitle { text-align: center; font-size: 13px; color: var(--muted); margin-bottom: 8px; }
-    .thankyou-banner { background: linear-gradient(135deg, rgba(124,106,247,0.12), rgba(99,60,180,0.08)); border: 1px solid rgba(124,106,247,0.25); border-radius: 16px; padding: 22px 24px; text-align: center; animation: fadeUp 0.6s ease; }
-    .ty-emoji { font-size: 30px; margin-bottom: 10px; }
-    .ty-title { font-family: 'Space Mono', monospace; font-size: 13px; color: var(--purple2); letter-spacing: 1px; margin-bottom: 10px; }
-    .ty-text { font-size: 13px; color: #a0a0c0; line-height: 1.7; }
-    .ty-brand { font-family: 'Space Mono', monospace; font-size: 11px; color: rgba(124,106,247,0.5); margin-top: 14px; letter-spacing: 1px; }
     .result-card { background: var(--surface); border: 1px solid var(--border); border-radius: 16px; padding: 18px 20px; animation: fadeUp 0.4s ease; }
     .result-card.rank-1 { border-color: var(--gold); }
     .result-card.rank-2 { border-color: var(--silver); }
@@ -103,17 +112,34 @@
     .match-pill { padding: 4px 12px; border-radius: 20px; font-size: 13px; font-weight: 600; background: rgba(124,106,247,0.15); color: var(--purple2); }
     .card-reason { font-size: 13px; color: #a0a0c0; line-height: 1.6; margin-bottom: 10px; }
     .progress-bar-bg { width: 100%; height: 5px; background: var(--border); border-radius: 4px; overflow: hidden; }
-    .progress-bar-fill { height: 100%; border-radius: 4px; background: var(--purple); transition: width 1s ease; }
-    .rank-1 .progress-bar-fill { background: var(--gold); } .rank-2 .progress-bar-fill { background: var(--silver); } .rank-3 .progress-bar-fill { background: var(--bronze); }
-    .reality-card { background: var(--surface); border: 1px solid var(--border); border-radius: 16px; padding: 18px 20px; }
+    .progress-bar-fill { height: 100%; border-radius: 4px; transition: width 1.2s ease; }
+    .rank-1 .progress-bar-fill { background: var(--gold); }
+    .rank-2 .progress-bar-fill { background: var(--silver); }
+    .rank-3 .progress-bar-fill { background: var(--bronze); }
+    .reality-card { background: var(--surface); border: 1px solid var(--border); border-radius: 16px; padding: 18px 20px; animation: fadeUp 0.5s ease; }
     .reality-title { font-size: 12px; font-weight: 600; color: var(--muted); letter-spacing: 1px; text-transform: uppercase; margin-bottom: 14px; }
     .reality-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; }
     .reality-item { background: var(--surface2); border-radius: 12px; padding: 12px; text-align: center; }
     .reality-icon { font-size: 20px; margin-bottom: 6px; }
     .reality-label { font-size: 11px; color: var(--muted); margin-bottom: 4px; }
     .reality-value { font-size: 14px; font-weight: 600; color: var(--text); }
-    .restart-btn { margin: 8px auto 0; padding: 12px 28px; border-radius: 26px; border: 1px solid var(--purple); background: transparent; color: var(--purple2); font-size: 14px; font-weight: 500; cursor: pointer; font-family: 'Inter', sans-serif; transition: all 0.2s; display: block; }
-    .restart-btn:hover { background: var(--purple); color: white; }
+    .thankyou-banner {
+      background: linear-gradient(135deg, rgba(124,106,247,0.12), rgba(99,60,180,0.08));
+      border: 1px solid rgba(124,106,247,0.25);
+      border-radius: 16px; padding: 24px; text-align: center; animation: fadeUp 0.6s ease;
+    }
+    .ty-emoji { font-size: 32px; margin-bottom: 10px; }
+    .ty-title { font-family: 'Space Mono', monospace; font-size: 14px; color: var(--purple2); letter-spacing: 1px; margin-bottom: 12px; }
+    .ty-text { font-size: 13px; color: #a0a0c0; line-height: 1.8; }
+    .ty-brand { font-family: 'Space Mono', monospace; font-size: 11px; color: rgba(124,106,247,0.5); margin-top: 14px; letter-spacing: 1px; }
+    .restart-btn {
+      margin: 4px auto 16px; padding: 14px 36px;
+      border-radius: 26px; border: 1px solid var(--purple);
+      background: transparent; color: var(--purple2);
+      font-size: 14px; font-weight: 500; cursor: pointer;
+      font-family: 'Inter', sans-serif; transition: all 0.2s; display: block;
+    }
+    .restart-btn:hover { background: var(--purple); color: white; transform: scale(1.02); }
   </style>
 </head>
 <body>
@@ -126,7 +152,10 @@
       <div class="logo-icon">AI</div>
       <span class="logo-text">career.ai</span>
     </div>
-    <div class="status-badge"><div class="status-dot"></div>Online</div>
+    <div class="header-right">
+      <button class="header-restart" onclick="restartChat()">↩ Restart</button>
+      <div class="status-badge"><div class="status-dot"></div>Online</div>
+    </div>
   </div>
 
   <div class="main-container" id="chatView">
@@ -147,16 +176,16 @@
       <div class="ty-text">
         We hope this analysis helps you make a confident decision about your future.<br><br>
         Remember — the right path aligns with both your passion and your strengths.<br><br>
-        <strong style="color:var(--purple2);">We wish you the very best! 🚀</strong>
+        <strong style="color:var(--purple2);">We wish you the very best for your future! 🚀</strong>
       </div>
       <div class="ty-brand">— career.ai by Sameer</div>
     </div>
-    <button class="restart-btn" onclick="restartChat()">↩ Start Over</button>
+    <button class="restart-btn" onclick="restartChat()">↩ Start New Analysis</button>
   </div>
 
   <script>
     // ── PASTE YOUR GEMINI API KEY HERE ──
-    const GEMINI_API_KEY = 'AIzaSyBOHDW6PeV7jk3FFkpqRqZ2PRGjqIBY3LQ';
+    const GEMINI_API_KEY = 'AIzaSyDr82ZoFkjBiZ-rOIk7xBTkUJUbog-OIYM';
 
     const chatContainer = document.getElementById('chatContainer');
     const userInput     = document.getElementById('userInput');
@@ -167,7 +196,7 @@
 
     const systemPrompt = `You are career.ai — a friendly, intelligent career guidance system for Indian students in 10th or 12th standard.
 FLOW:
-STEP 1 — Greet and ask if student is in 10th or 12th standard.
+STEP 1 — Greet warmly and ask if student is in 10th or 12th standard.
 STEP 2 — Ask these ONE AT A TIME. Never ask two together:
   1. Favourite subject?
   2. Difficult subjects?
@@ -177,15 +206,15 @@ STEP 2 — Ask these ONE AT A TIME. Never ask two together:
   6. Family financial situation? (low/medium/high)
   7. Safe job or high-risk high-reward career?
   8. Imagine yourself at age 30 — what are you doing?
-STEP 3 — After ALL 8 answers output EXACTLY:
+STEP 3 — After ALL 8 answers, say "Thank you! Analyzing your profile..." then output EXACTLY this format on new lines:
 ---RESULTS---
-TOP:[name]|[number]|[2 sentence reason]
-SECOND:[name]|[number]|[2 sentence reason]
-THIRD:[name]|[number]|[2 sentence reason]
+TOP:[name]|[number only]|[2 sentence reason]
+SECOND:[name]|[number only]|[2 sentence reason]
+THIRD:[name]|[number only]|[2 sentence reason]
 REALITY:[X-Y years]|[Easy/Medium/Hard]|[Low/Medium/High]
 ---END---
 Options: MPC (Engineering/JEE), BiPC (Medical/NEET), Commerce (CA/MBA), Arts/Humanities, Diploma/Polytechnic, Computer Science (BCA/BSc CS)
-RULES: Warm and simple. One question at a time. Short replies. Indian context. Do NOT output ---RESULTS--- until all 8 answered.`;
+RULES: Warm and simple. One question at a time. Short replies. Indian context. Do NOT output ---RESULTS--- until all 8 answered. The ---RESULTS--- block must always end with ---END---.`;
 
     function addMessage(text, sender) {
       const div = document.createElement('div');
@@ -203,7 +232,11 @@ RULES: Warm and simple. One question at a time. Short replies. Indian context. D
       options.forEach(opt => {
         const btn = document.createElement('button');
         btn.className = 'quick-btn'; btn.textContent = opt;
-        btn.onclick = () => { document.getElementById('quickReplies')?.remove(); userInput.value = opt; handleUserMessage(); };
+        btn.onclick = () => {
+          document.getElementById('quickReplies')?.remove();
+          userInput.value = opt;
+          handleUserMessage();
+        };
         div.appendChild(btn);
       });
       chatContainer.appendChild(div);
@@ -221,25 +254,70 @@ RULES: Warm and simple. One question at a time. Short replies. Indian context. D
     function removeTyping() { document.getElementById('typingIndicator')?.remove(); }
 
     function parseAndShowResults(text) {
-      const block = text.split('---RESULTS---')[1].split('---END---')[0].trim();
-      const lines = block.split('\n').map(l => l.trim()).filter(Boolean);
-      const results = []; let reality = null;
-      lines.forEach(line => {
-        if (line.startsWith('TOP:'))         { const p=line.replace('TOP:','').split('|');      results.push({rank:1,label:'🥇 Top Pick',name:p[0].trim(),score:parseInt(p[1]),reason:p[2].trim()}); }
-        else if (line.startsWith('SECOND:')) { const p=line.replace('SECOND:','').split('|'); results.push({rank:2,label:'🥈 Second Option',name:p[0].trim(),score:parseInt(p[1]),reason:p[2].trim()}); }
-        else if (line.startsWith('THIRD:'))  { const p=line.replace('THIRD:','').split('|');  results.push({rank:3,label:'🥉 Third Option',name:p[0].trim(),score:parseInt(p[1]),reason:p[2].trim()}); }
-        else if (line.startsWith('REALITY:')){ const p=line.replace('REALITY:','').split('|'); reality={years:p[0].trim(),difficulty:p[1].trim(),competition:p[2].trim()}; }
-      });
-      let html = '';
-      results.forEach(r => {
-        html += `<div class="result-card rank-${r.rank}"><div class="rank-label">${r.label}</div><div class="card-top"><div class="career-name">${r.name}</div><div class="match-pill">${r.score}% match</div></div><p class="card-reason">${r.reason}</p><div class="progress-bar-bg"><div class="progress-bar-fill" style="width:${r.score}%"></div></div></div>`;
-      });
-      if (reality) {
-        html += `<div class="reality-card"><div class="reality-title">⚠ Reality Check</div><div class="reality-grid"><div class="reality-item"><div class="reality-icon">📅</div><div class="reality-label">Study Duration</div><div class="reality-value">${reality.years}</div></div><div class="reality-item"><div class="reality-icon">🎯</div><div class="reality-label">Difficulty</div><div class="reality-value">${reality.difficulty}</div></div><div class="reality-item"><div class="reality-icon">⚡</div><div class="reality-label">Competition</div><div class="reality-value">${reality.competition}</div></div></div></div>`;
+      try {
+        const block = text.split('---RESULTS---')[1].split('---END---')[0].trim();
+        const lines = block.split('\n').map(l => l.trim()).filter(Boolean);
+        const results = []; let reality = null;
+
+        lines.forEach(line => {
+          if (line.startsWith('TOP:')) {
+            const p = line.replace('TOP:', '').split('|');
+            results.push({ rank: 1, label: '🥇 Top Pick', name: p[0].trim(), score: parseInt(p[1]), reason: p[2].trim() });
+          } else if (line.startsWith('SECOND:')) {
+            const p = line.replace('SECOND:', '').split('|');
+            results.push({ rank: 2, label: '🥈 Second Option', name: p[0].trim(), score: parseInt(p[1]), reason: p[2].trim() });
+          } else if (line.startsWith('THIRD:')) {
+            const p = line.replace('THIRD:', '').split('|');
+            results.push({ rank: 3, label: '🥉 Third Option', name: p[0].trim(), score: parseInt(p[1]), reason: p[2].trim() });
+          } else if (line.startsWith('REALITY:')) {
+            const p = line.replace('REALITY:', '').split('|');
+            reality = { years: p[0].trim(), difficulty: p[1].trim(), competition: p[2].trim() };
+          }
+        });
+
+        let html = '';
+        results.forEach(r => {
+          html += `
+            <div class="result-card rank-${r.rank}">
+              <div class="rank-label">${r.label}</div>
+              <div class="card-top">
+                <div class="career-name">${r.name}</div>
+                <div class="match-pill">${r.score}% match</div>
+              </div>
+              <p class="card-reason">${r.reason}</p>
+              <div class="progress-bar-bg">
+                <div class="progress-bar-fill" style="width:0%" data-width="${r.score}%"></div>
+              </div>
+            </div>`;
+        });
+
+        if (reality) {
+          html += `
+            <div class="reality-card">
+              <div class="reality-title">⚠ Reality Check</div>
+              <div class="reality-grid">
+                <div class="reality-item"><div class="reality-icon">📅</div><div class="reality-label">Study Duration</div><div class="reality-value">${reality.years}</div></div>
+                <div class="reality-item"><div class="reality-icon">🎯</div><div class="reality-label">Difficulty</div><div class="reality-value">${reality.difficulty}</div></div>
+                <div class="reality-item"><div class="reality-icon">⚡</div><div class="reality-label">Competition</div><div class="reality-value">${reality.competition}</div></div>
+              </div>
+            </div>`;
+        }
+
+        document.getElementById('resultsContent').innerHTML = html;
+        chatView.style.display = 'none';
+        resultsScreen.style.display = 'flex';
+
+        // Animate progress bars after render
+        setTimeout(() => {
+          document.querySelectorAll('.progress-bar-fill').forEach(bar => {
+            bar.style.width = bar.dataset.width;
+          });
+        }, 300);
+
+      } catch (e) {
+        addMessage('Analysis complete! Please restart for a fresh session.', 'bot');
+        console.error('Parse error:', e);
       }
-      document.getElementById('resultsContent').innerHTML = html;
-      chatView.style.display = 'none';
-      resultsScreen.style.display = 'flex';
     }
 
     async function getBotReply(userText) {
@@ -247,14 +325,10 @@ RULES: Warm and simple. One question at a time. Short replies. Indian context. D
       showTyping();
 
       try {
-        // Build Gemini contents
         const contents = [];
+        contents.push({ role: 'user', parts: [{ text: 'SYSTEM INSTRUCTIONS: ' + systemPrompt }] });
+        contents.push({ role: 'model', parts: [{ text: 'Understood. I will follow all instructions carefully.' }] });
 
-        // Add system as first exchange
-        contents.push({ role: 'user', parts: [{ text: 'SYSTEM: ' + systemPrompt }] });
-        contents.push({ role: 'model', parts: [{ text: 'Understood. I will follow these instructions.' }] });
-
-        // Add conversation
         conversationHistory.forEach(msg => {
           contents.push({
             role: msg.role === 'assistant' ? 'model' : 'user',
@@ -263,7 +337,7 @@ RULES: Warm and simple. One question at a time. Short replies. Indian context. D
         });
 
         const response = await fetch(
-          `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${GEMINI_API_KEY}`,
+          `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${GEMINI_API_KEY}`,
           {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
@@ -276,7 +350,17 @@ RULES: Warm and simple. One question at a time. Short replies. Indian context. D
 
         const data = await response.json();
 
-        if (data.error) throw new Error(data.error.message);
+        // Handle rate limit error gracefully
+        if (data.error) {
+          removeTyping();
+          if (data.error.code === 429) {
+            addMessage('⏳ Too many requests! Please wait 30 seconds and try again. The free API has a limit of 15 requests per minute.', 'bot');
+          } else {
+            addMessage(`API Error: ${data.error.message}`, 'bot');
+          }
+          conversationHistory.pop();
+          return;
+        }
 
         const botReply = data.candidates?.[0]?.content?.parts?.[0]?.text;
         if (!botReply) throw new Error('No response from AI');
@@ -284,18 +368,21 @@ RULES: Warm and simple. One question at a time. Short replies. Indian context. D
         conversationHistory.push({ role: 'assistant', content: botReply });
         removeTyping();
 
-        if (botReply.includes('---RESULTS---')) {
+        if (botReply.includes('---RESULTS---') && botReply.includes('---END---')) {
           const preText = botReply.split('---RESULTS---')[0].trim();
           if (preText) addMessage(preText, 'bot');
-          setTimeout(() => parseAndShowResults(botReply), 1200);
+          setTimeout(() => parseAndShowResults(botReply), 800);
         } else {
           addMessage(botReply, 'bot');
-          if (conversationHistory.length === 2) addQuickReplies(['10th Standard', '12th Standard']);
+          if (conversationHistory.length === 2) {
+            addQuickReplies(['10th Standard', '12th Standard']);
+          }
         }
 
       } catch (error) {
         removeTyping();
-        addMessage(`Error: ${error.message}`, 'bot');
+        addMessage(`Something went wrong: ${error.message}. Please try again.`, 'bot');
+        conversationHistory.pop();
         console.error('Error:', error);
       }
     }
@@ -317,13 +404,14 @@ RULES: Warm and simple. One question at a time. Short replies. Indian context. D
       chatContainer.innerHTML = '';
       resultsScreen.style.display = 'none';
       chatView.style.display = 'flex';
+      document.getElementById('resultsContent').innerHTML = '';
       startChat();
     }
 
     function startChat() { getBotReply('Hello, I want career guidance.'); }
     startChat();
 
-    // BACKGROUND
+    // BACKGROUND ANIMATION
     const canvas = document.getElementById('bgCanvas');
     const ctx = canvas.getContext('2d');
     let W, H, particles;
